@@ -1,83 +1,78 @@
-let players = JSON.parse(localStorage.getItem('players')) || [];
-let timerInterval;
-let timer = { minutes: 0, seconds: 0 };
-
-document.addEventListener('DOMContentLoaded', () => {
-    updatePlayerList();
-    updateTimerDisplay();
-});
-
-function addPlayer() {
-    const playerName = document.getElementById('player-name').value;
-    if (playerName) {
-        players.push({ name: playerName, chips: 1000 });
-        updatePlayerList();
-        savePlayers();
-        document.getElementById('player-name').value = '';
-    }
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-function updatePlayerList() {
-    const playerList = document.getElementById('players');
-    playerList.innerHTML = '';
-    players.forEach((player, index) => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `${player.name} - Fichas: ${player.chips} 
-            <button onclick="removePlayer(${index})">Remover</button>`;
-        playerList.appendChild(listItem);
-    });
+.dark-theme {
+    background-color: #2c3e50;
+    color: #ecf0f1;
 }
 
-function removePlayer(index) {
-    players.splice(index, 1);
-    updatePlayerList();
-    savePlayers();
+.light-theme {
+    background-color: #ecf0f1;
+    color: #2c3e50;
 }
 
-function adjustChips() {
-    const playerChips = parseInt(document.getElementById('player-chips').value, 10);
-    if (!isNaN(playerChips)) {
-        players.forEach(player => player.chips = playerChips);
-        updatePlayerList();
-        savePlayers();
-    }
+#tournament-manager {
+    background: #34495e;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 300px;
+    transition: background-color 0.3s;
 }
 
-function startTimer() {
-    if (timerInterval) clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        timer.seconds++;
-        if (timer.seconds == 60) {
-            timer.minutes++;
-            timer.seconds = 0;
-        }
-        updateTimerDisplay();
-    }, 1000);
+.light-theme #tournament-manager {
+    background: #bdc3c7;
 }
 
-function pauseTimer() {
-    clearInterval(timerInterval);
+h1, h2 {
+    text-align: center;
 }
 
-function resetTimer() {
-    clearInterval(timerInterval);
-    addRoundHistory();
-    timer = { minutes: 0, seconds: 0 };
-    updateTimerDisplay();
+button {
+    width: 100%;
+    padding: 10px;
+    background: #e74c3c;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-function updateTimerDisplay() {
-    const timerDisplay = document.getElementById('timer');
-    timerDisplay.innerText = `${String(timer.minutes).padStart(2, '0')}:${String(timer.seconds).padStart(2, '0')}`;
+button:hover {
+    background: #c0392b;
 }
 
-function addRoundHistory() {
-    const roundHistory = document.getElementById('rounds');
-    const roundItem = document.createElement('li');
-    roundItem.innerText = `Rodada: ${String(timer.minutes).padStart(2, '0')}:${String(timer.seconds).padStart(2, '0')}`;
-    roundHistory.appendChild(roundItem);
+.light-theme button {
+    background: #3498db;
 }
 
-function savePlayers() {
-    localStorage.setItem('players', JSON.stringify(players));
+.light-theme button:hover {
+    background: #2980b9;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #1abc9c;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.statistics {
+    margin-top: 20px;
 }
