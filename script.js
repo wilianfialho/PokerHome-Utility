@@ -5,6 +5,8 @@ let timer = { minutes: 0, seconds: 0 };
 document.addEventListener('DOMContentLoaded', () => {
     updatePlayerList();
     updateTimerDisplay();
+    updateStatistics();
+    setInitialTheme();
 });
 
 function addPlayer() {
@@ -26,6 +28,7 @@ function updatePlayerList() {
             <button onclick="removePlayer(${index})">Remover</button>`;
         playerList.appendChild(listItem);
     });
+    updateStatistics();
 }
 
 function removePlayer(index) {
@@ -80,4 +83,23 @@ function addRoundHistory() {
 
 function savePlayers() {
     localStorage.setItem('players', JSON.stringify(players));
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('dark-theme');
+    document.body.classList.toggle('light-theme');
+    localStorage.setItem('theme', document.body.className);
+}
+
+function setInitialTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.body.className = savedTheme;
+    }
+}
+
+function updateStatistics() {
+    const statsContent = document.getElementById('statistics-content');
+    const totalChips = players.reduce((sum, player) => sum + player.chips, 0);
+    statsContent.innerHTML = `Total de Fichas: ${totalChips}`;
 }
